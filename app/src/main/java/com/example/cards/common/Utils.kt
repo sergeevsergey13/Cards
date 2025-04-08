@@ -7,8 +7,8 @@ import kotlin.math.roundToInt
 fun getIndexOffsetInt(index: Int): Int {
     return when (index) {
         0 -> 0
-        1 -> FIRST_OFFSET
-        2 -> SECOND_OFFSET
+        1 -> 32
+        2 -> 56
         else -> throw RuntimeException()
     }
 }
