@@ -25,9 +25,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.cards.implementation.BlackCard
+import com.example.cards.implementation.BlackCardState
 import com.example.cards.implementation.BlueCard
+import com.example.cards.implementation.BlueCardState
 import com.example.cards.implementation.PurpleCard
+import com.example.cards.implementation.PurpleCardState
 import com.example.cards.implementation.RedCard
+import com.example.cards.implementation.RedCardState
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -75,10 +79,10 @@ fun BindContainer(
         contentAlignment = Alignment.Center
     ) {
         when (state) {
-            is BlueCard -> BlueCard()
-            is BlackCard -> BlackCard()
-            is RedCard -> RedCard()
-            is PurpleCard -> PurpleCard()
+            is BlueCardState -> BlueCard(state)
+            is BlackCardState -> BlackCard(state)
+            is RedCardState -> RedCard(state)
+            is PurpleCardState -> PurpleCard(state)
         }
     }
 

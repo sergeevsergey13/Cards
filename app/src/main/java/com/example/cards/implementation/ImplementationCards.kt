@@ -17,51 +17,51 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Immutable
-data class RedCard(
+data class RedCardState(
     override val cardId: CardsId,
     val specificRedField: String
 ) : CardState()
 
 @Immutable
-data class BlackCard(
+data class BlackCardState(
     override val cardId: CardsId,
     val specificBlackField: List<String>
 ) : CardState()
 
 @Immutable
-data class PurpleCard(
+data class PurpleCardState(
     override val cardId: CardsId,
     val specificPurpleField: Int
 ) : CardState()
 
 @Immutable
-data class BlueCard(
+data class BlueCardState(
     override val cardId: CardsId,
     val specificBlueField: List<Int>
 ) : CardState()
 
-object RedCardController : FeatureBlockController<RedCard, CardsUiEvent>() {
-    override val state: StateFlow<RedCard>
-        get() = MutableStateFlow(RedCard(CardsId.RED, ""))
+object RedCardController : FeatureBlockController<RedCardState, CardsUiEvent>() {
+    override val state: StateFlow<RedCardState>
+        get() = MutableStateFlow(RedCardState(CardsId.RED, ""))
 }
 
-object BlueCardController : FeatureBlockController<BlueCard, CardsUiEvent>() {
-    override val state: StateFlow<BlueCard>
-        get() = MutableStateFlow(BlueCard(CardsId.BLUE, listOf(1, 2, 3)))
+object BlueCardController : FeatureBlockController<BlueCardState, CardsUiEvent>() {
+    override val state: StateFlow<BlueCardState>
+        get() = MutableStateFlow(BlueCardState(CardsId.BLUE, listOf(1, 2, 3)))
 }
 
-object BlackCardController : FeatureBlockController<BlackCard, CardsUiEvent>() {
-    override val state: StateFlow<BlackCard>
-        get() = MutableStateFlow(BlackCard(CardsId.BLACK, listOf("a", "b")))
+object BlackCardController : FeatureBlockController<BlackCardState, CardsUiEvent>() {
+    override val state: StateFlow<BlackCardState>
+        get() = MutableStateFlow(BlackCardState(CardsId.BLACK, listOf("a", "b")))
 }
 
-object PurpleCardController : FeatureBlockController<PurpleCard, CardsUiEvent>() {
-    override val state: StateFlow<PurpleCard>
-        get() = MutableStateFlow(PurpleCard(CardsId.PURPLE, 9))
+object PurpleCardController : FeatureBlockController<PurpleCardState, CardsUiEvent>() {
+    override val state: StateFlow<PurpleCardState>
+        get() = MutableStateFlow(PurpleCardState(CardsId.PURPLE, 9))
 }
 
 @Composable
-fun RedCard() {
+fun RedCard(state: RedCardState) {
     Box(
         Modifier
             .fillMaxSize()
@@ -74,7 +74,7 @@ fun RedCard() {
 
 
 @Composable
-fun BlackCard() {
+fun BlackCard(state: BlackCardState) {
     Box(
         Modifier
             .fillMaxSize()
@@ -86,7 +86,7 @@ fun BlackCard() {
 }
 
 @Composable
-fun BlueCard() {
+fun BlueCard(state: BlueCardState) {
     Box(
         Modifier
             .fillMaxSize()
@@ -98,7 +98,7 @@ fun BlueCard() {
 }
 
 @Composable
-fun PurpleCard() {
+fun PurpleCard(state: PurpleCardState) {
     Box(
         Modifier
             .fillMaxSize()
