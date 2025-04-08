@@ -41,7 +41,7 @@ fun CardsContainerView(
         modifier = modifier,
         contentAlignment = Alignment.CenterStart
     ) {
-        val cardWidth = remember { maxWidth - CARDS_TOTAL_OFFSET.dp }
+        val cardWidth = remember { maxWidth - SECOND_OFFSET.dp }
 
         hostState.value.state.cardsOrder.take(VISIBLE_CARDS).forEachIndexed { index, cardsIds ->
             key(cardsIds) {
