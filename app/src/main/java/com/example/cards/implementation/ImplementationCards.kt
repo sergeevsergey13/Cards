@@ -90,7 +90,7 @@ fun RedCard(state: RedCardState) {
     Box(
         Modifier
             .fillMaxSize()
-            .background(Color.Red)
+            .background(Color(0xFF658599))
     ) {
         Text(
             text = "Это просто карточка",
@@ -112,8 +112,9 @@ fun BlackCard(state: BlackCardState) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(Color(0XFF1A1F23))
             .padding(16.dp)
+            .padding(bottom = 16.dp)
             .verticalScroll(state = state.scrollState),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -124,17 +125,6 @@ fun BlackCard(state: BlackCardState) {
             color = Color.White,
             fontSize = 18.sp
         )
-
-        Text(
-            text = "Поля со стейта",
-            modifier = Modifier
-                .fillMaxWidth(),
-            color = Color.White
-        )
-
-        state.specificBlackField.forEach {
-            Text(it, color = Color.White)
-        }
 
         Text(
             text = LoremIpsum(500).values.joinToString(" "),
@@ -153,7 +143,8 @@ fun BlueCard(state: BlueCardState) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Blue),
+            .background(Color(0xFF0754A7))
+            .padding(bottom = 48.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
 
@@ -207,7 +198,7 @@ fun PurpleCard(state: PurpleCardState) {
     Box(
         Modifier
             .fillMaxSize()
-            .background(Color.Magenta)
+            .background(Color(0xFF795893))
     ) {
         Text(
             text = "Это просто карточка",

@@ -9,7 +9,8 @@ enum class CardsId {
 
 @Immutable
 data class CardContainerState(
-    val cardsOrder: List<CardsId>
+    val cardsOrder: List<CardsId>,
+    val currentPageIndex: Int,
 )
 
 @Immutable

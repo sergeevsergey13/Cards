@@ -23,8 +23,13 @@ class CardsContainerViewModel :
         )
     ) {
 
+    val startedOrder = CardsId.entries.toList()
+
     private val _hostCardState = MutableStateFlow(
-        CardContainerState(CardsId.entries.toList())
+        CardContainerState(
+            cardsOrder = CardsId.entries.toList(),
+            currentPageIndex = 0
+        )
     )
 
     val hostCardState = hostState(
@@ -38,7 +43,7 @@ class CardsContainerViewModel :
             val prevState = _hostCardState.value.cardsOrder
             val firstElement = prevState.first()
             val newState = prevState.drop(1) + firstElement
-            _hostCardState.value = CardContainerState(newState)
+            _hostCardState.value = CardContainerState(newState, startedOrder.indexOf(newState.first()))
         }
     }
 }
