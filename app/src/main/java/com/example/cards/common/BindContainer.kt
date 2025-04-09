@@ -1,9 +1,5 @@
 package com.example.cards.common
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntOffsetAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.Orientation
@@ -21,6 +17,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
 import com.example.cards.implementation.BlackCard
 import com.example.cards.implementation.BlackCardState
 import com.example.cards.implementation.BlueCard
@@ -39,44 +36,43 @@ fun BindContainer(
     index: Int,
     progress: Float
 ) {
-    val offset = animateIntOffsetAsState(
-        targetValue = with(LocalDensity.current) { IntOffset(x = getIndexOffset(index), y = 0) },
-        label = "",
-        animationSpec = tween(ANIM_DURATION)
-    )
+    val density = LocalDensity.current
 
-    val scaleState = animateFloatAsState(
-        targetValue = when (index) {
-            0 -> 1f
-            1 -> 1f - (32.dp / cardWidth)
-            2 -> 1f - (56.dp / cardWidth)
-            else -> throw RuntimeException()
-        },
-        animationSpec = tween(ANIM_DURATION),
-        label = ""
-    )
+    val offset = with(density) {
+        IntOffset(
+            x = when (index) {
+                0 -> 0.dp.toPx().roundToInt()
+                1 -> lerp(32.dp.toPx(), 0f, progress).roundToInt()
+                2 -> lerp(56.dp.toPx(), 32.dp.toPx(), progress).roundToInt()
+                3 -> 56.dp.toPx().roundToInt()
+                else -> throw RuntimeException()
+            },
+            y = 0
+        )
+    }
 
-    val roundedCorners = animateDpAsState(
-        targetValue = when (index) {
-            0 -> 24.dp
-            1 -> 20.dp
-            2 -> 18.dp
-            else -> throw RuntimeException()
-        },
-        animationSpec = tween(ANIM_DURATION),
-        label = ""
-    )
+    // Вычисляем стартовые скейлы для карточек 1 и 2
+    val startScale1 = (cardWidth - 32.dp) / cardWidth
+    val startScale2 = (cardWidth - 56.dp) / cardWidth
+
+    val scaleState = when (index) {
+        0 -> 1f
+        1 -> lerp(startScale1, 1f, progress)
+        2 -> lerp(startScale2, startScale1, progress)
+        3 -> startScale2
+        else -> throw RuntimeException()
+    }
 
     Box(
         modifier = modifier
             .width(cardWidth)
-            .offset { offset.value }
+            .offset { offset }
             .graphicsLayer {
-                scaleX = scaleState.value
-                scaleY = scaleState.value
+                scaleX = scaleState
+                scaleY = scaleState
             }
-            .clip(RoundedCornerShape(roundedCorners.value)),
-        contentAlignment = Alignment.Center
+            .clip(RoundedCornerShape(24.dp)),
+        contentAlignment = Alignment.CenterStart
     ) {
         when (state) {
             is BlueCardState -> BlueCard(state)

@@ -17,6 +17,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -26,6 +27,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cards.common.feautreblocks.FeatureBlockHostModel
 import com.example.cards.common.feautreblocks.FeatureBlockUiEvent
 import com.example.cards.common.feautreblocks.FeatureBlockView
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun CardsContainer(
@@ -50,7 +53,7 @@ fun CardsContainerView(
 ) {
     BoxWithConstraints(
         modifier = modifier,
-        contentAlignment = Alignment.CenterStart
+        contentAlignment = Alignment.Center
     ) {
         val cardWidth = remember { maxWidth - 28.dp }
         val cardWidthPx = with(LocalDensity.current) { cardWidth.toPx() }
@@ -61,10 +64,10 @@ fun CardsContainerView(
                 initialValue = DragAnchors.CENTER,
                 positionalThreshold = { distance: Float -> distance * 0.15f },
                 velocityThreshold = { cardWidthPx },
-                animationSpec = tween(ANIM_DURATION),
+                animationSpec = tween(),
                 anchors = DraggableAnchors {
                     DragAnchors.CENTER at 0f
-                    DragAnchors.LEFT at -cardWidthPx - 100
+                    DragAnchors.LEFT at -cardWidthPx - 100f
                 }
             )
         }
@@ -97,11 +100,17 @@ fun CardsContainerView(
             if (stateAnchor.currentValue == DragAnchors.LEFT) {
                 stateAnchor.snapTo(DragAnchors.CENTER)
                 onEvent(FeatureBlockUiEvent("", CardsUiEvent.SwipedLeft))
+                customProgress.floatValue = 0f
             }
         }
 
         LaunchedEffect(stateAnchor.progress) {
-            Log.d("SSV", "${stateAnchor.progress}")
+            if (stateAnchor.progress <= 0.05f) return@LaunchedEffect
+            if (stateAnchor.progress == 1f) {
+                customProgress.floatValue
+            } else {
+               customProgress.floatValue = (stateAnchor.progress).coerceAtMost(1f)
+            }
         }
     }
 }
